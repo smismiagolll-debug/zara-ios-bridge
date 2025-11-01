@@ -1,0 +1,15 @@
+workflows:
+  zara_ios_build:
+    name: Zara iOS Bridge Build
+    environment:
+      xcode: latest
+    scripts:
+      - name: Build ZaraBridgePulseApp
+        script: |
+          xcodebuild -scheme ZaraBridgePulseApp             -sdk iphoneos             -configuration Release             CODE_SIGN_IDENTITY=""             CODE_SIGNING_REQUIRED=NO             CODE_SIGNING_ALLOWED=NO
+    artifacts:
+      - build/Release-iphoneos/*.app
+    publishing:
+      email:
+        recipients:
+          - you@example.com
