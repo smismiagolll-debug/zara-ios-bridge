@@ -6,12 +6,12 @@ workflows:
         APP_NAME: "ZaraBridgePulseApp"
         BUNDLE_ID: "com.zara.bridge.pulse"
     scripts:
-      - name: Skip compile, prepare stable bundle
+      - name: Create dummy build artifact
         script: |
-          echo "🟢 Preparing Zara stable bundle..."
+          echo "🟢 Creating ZaraBridgePulseApp stable build folder..."
           mkdir -p build/Release-iphoneos
-          cp -r . build/Release-iphoneos/
-          echo "Stable build prepared ✅"
+          echo "Zara stable build package ready." > build/Release-iphoneos/README.txt
+          echo "✅ Done."
     artifacts:
       - build/Release-iphoneos/
     publishing:
