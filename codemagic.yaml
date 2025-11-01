@@ -1,22 +1,40 @@
 workflows:
-  zara_ios_build:
-    name: Zara iOS Bridge Build
+  zara_ios_release:
+    name: Zara iOS Release Build
+    max_build_duration: 60
     environment:
-      xcode: latest
+      vars:
+        XCODE_SCHEME: "ZaraBridgePulseApp"
+        XCODE_PROJECT: "ZaraBridgePulseApp.xcodeproj"
+        APP_VERSION: "1.0.0"
+      xcode: 16.4
+      cocoapods: default
+      node: latest
     scripts:
+      - name: Clean previous build
+        script: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData || true
+          rm -rf build || true
+      - name: Set Swift build flags
+        script: |
+          export SWIFT_VERSION=6.0
+          export SWIFT_OPTIMIZATION_LEVEL=-Onone
       - name: Build ZaraBridgePulseApp
         script: |
           xcodebuild \
-            -scheme ZaraBridgePulseApp \
-            -sdk iphoneos \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
             -configuration Release \
             -destination 'generic/platform=iOS' \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            build
     artifacts:
-      - build/Release-iphoneos/*.app
+      - build/**/*.ipa
+      - build/**/*.xcarchive
     publishing:
       email:
         recipients:
-          - you@example.com
+          - "zsolt@example.com"
+
