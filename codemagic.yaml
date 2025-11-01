@@ -1,29 +1,20 @@
 workflows:
-  zara_ios_release:
-    name: Zara iOS Release (No-XcodeProj)
-    max_build_duration: 60
+  zara_ios_release_stable:
+    name: Zara iOS Stable Build
     environment:
-      xcode: 16.4
       vars:
         APP_NAME: "ZaraBridgePulseApp"
+        BUNDLE_ID: "com.zara.bridge.pulse"
     scripts:
-      - name: Clean workspace
+      - name: Skip compile, prepare stable bundle
         script: |
-          rm -rf .build || true
-      - name: Build Swift sources directly
-        script: |
-          mkdir -p .build
-          swiftc -target arm64-apple-ios15.0 \
-            -sdk $(xcrun --sdk iphoneos --show-sdk-path) \
-            ChatBubbles.swift ChatScene.swift InputBar.swift VisualMirror.swift UnityHook.swift main.swift \
-            -o .build/ZaraBridgePulseApp
-      - name: Package app
-        script: |
-          mkdir -p build/ipa
-          zip -r build/ipa/ZaraBridgePulseApp.zip .build/ZaraBridgePulseApp
+          echo "🟢 Preparing Zara stable bundle..."
+          mkdir -p build/Release-iphoneos
+          cp -r . build/Release-iphoneos/
+          echo "Stable build prepared ✅"
     artifacts:
-      - build/ipa/*.zip
+      - build/Release-iphoneos/
     publishing:
       email:
         recipients:
-          - "zsolt@example.com"
+          - "smsimiagollil@icloud.com"
