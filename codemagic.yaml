@@ -1,40 +1,29 @@
 workflows:
   zara_ios_release:
-    name: Zara iOS Release Build
+    name: Zara iOS Release (No-XcodeProj)
     max_build_duration: 60
     environment:
-      vars:
-        XCODE_SCHEME: "ZaraBridgePulseApp"
-        XCODE_PROJECT: "ZaraBridgePulseApp.xcodeproj"
-        APP_VERSION: "1.0.0"
       xcode: 16.4
-      cocoapods: default
-      node: latest
+      vars:
+        APP_NAME: "ZaraBridgePulseApp"
     scripts:
-      - name: Clean previous build
+      - name: Clean workspace
         script: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData || true
-          rm -rf build || true
-      - name: Set Swift build flags
+          rm -rf .build || true
+      - name: Build Swift sources directly
         script: |
-          export SWIFT_VERSION=6.0
-          export SWIFT_OPTIMIZATION_LEVEL=-Onone
-      - name: Build ZaraBridgePulseApp
+          mkdir -p .build
+          swiftc -target arm64-apple-ios15.0 \
+            -sdk $(xcrun --sdk iphoneos --show-sdk-path) \
+            ChatBubbles.swift ChatScene.swift InputBar.swift VisualMirror.swift UnityHook.swift main.swift \
+            -o .build/ZaraBridgePulseApp
+      - name: Package app
         script: |
-          xcodebuild \
-            -project "$XCODE_PROJECT" \
-            -scheme "$XCODE_SCHEME" \
-            -configuration Release \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO \
-            build
+          mkdir -p build/ipa
+          zip -r build/ipa/ZaraBridgePulseApp.zip .build/ZaraBridgePulseApp
     artifacts:
-      - build/**/*.ipa
-      - build/**/*.xcarchive
+      - build/ipa/*.zip
     publishing:
       email:
         recipients:
           - "zsolt@example.com"
-
