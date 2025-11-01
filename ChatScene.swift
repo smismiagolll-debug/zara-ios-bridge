@@ -17,7 +17,7 @@ struct ChatScene: View {
             ScrollView {
                 VStack(spacing: 8) {
                     ForEach(messages, id: \.id) { msg in
-                        ChatBubble(message: msg)
+                       ChatBubble(message: msg.text, isFromZara: msg.isFromZara)
                     }
                 }
                 .padding()

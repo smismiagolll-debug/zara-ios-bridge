@@ -1,4 +1,4 @@
-// ZaraBridgePulse ñ lebegı beviteli mezı
+// ZaraBridgePulse ‚Äì lebeg≈ë beviteli mez≈ë
 import SwiftUI
 
 struct InputBar: View {
@@ -7,13 +7,13 @@ struct InputBar: View {
 
     var body: some View {
         HStack {
-            TextField("Õrj Zar·nakÖ", text: $message)
+            TextField("√çrj Zar√°nak‚Ä¶", text: $message)
                 .padding(12)
                 .background(Color.white.opacity(0.05))
                 .cornerRadius(15)
                 .foregroundColor(.white)
                 .placeholder(when: message.isEmpty) {
-                    Text("Õrj Zar·nakÖ").foregroundColor(.white.opacity(0.3))
+                    Text("√çrj Zar√°nak‚Ä¶").foregroundColor(.white.opacity(0.3))
                 }
 
             Button(action: {
